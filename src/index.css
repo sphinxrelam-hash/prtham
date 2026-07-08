@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  
+  --color-brand-green-50: #fff9f8; /* Soft warm rose white */
+  --color-brand-green-100: #fee2e2; /* Soft red tint */
+  --color-brand-green-600: #f05a4f; /* Trustworthy vibrant coral red */
+  --color-brand-green-700: #de443a; /* Deep coral */
+  --color-brand-green-800: #bd2a20; /* Rich crimson/burgundy */
+  --color-brand-green-900: #1e293b; /* Clean dark slate */
+  --color-brand-green-950: #0f172a; /* Sophisticated deep midnight */
+  --color-brand-accent: #f05a4f; /* Coral as primary accent */
+  --color-brand-accent-hover: #de443a;
+  
+  --color-brand-coral: #f05a4f;
+  --color-brand-cyan-glow: #3bc5ce;
+}
+
+@layer utilities {
+  html {
+    scroll-behavior: smooth;
+  }
+}
