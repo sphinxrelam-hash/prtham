@@ -11,6 +11,8 @@ interface GalleryItem {
   category: string;
   categoryHi: string;
   heightClass: string;
+  summary?: string;
+  summaryHi?: string;
 }
 
 // Write a function that programmatically generates the array of 52 gallery items
@@ -51,6 +53,41 @@ function generateGalleryItems(): GalleryItem[] {
     { en: 'School Ventilation Monitoring Setup', hi: 'स्कूल वेंटिलेशन निगरानी सेटअप' }
   ];
 
+  const summaries = [
+    {
+      en: 'Our specialist pulmonologists conduct comprehensive clinical spirometry assessments, screen children for pediatric asthma, and distribute clean nebulization kits directly to families in need.',
+      hi: 'हमारे विशेषज्ञ पल्मोनोलॉजिस्ट व्यापक क्लिनिकल स्पाइरोमेट्री जांच करते हैं, बच्चों में अस्थमा की जांच करते हैं, और जरूरतमंद परिवारों को सीधे नेबुलाइज़र किट वितरित करते हैं।'
+    },
+    {
+      en: 'Our youth volunteers plant dense belts of indigenous oxygenating flora around urban peripheral highways to filter vehicular emissions and restore biodiversity.',
+      hi: 'हमारे युवा स्वयंसेवक वाहनों के उत्सर्जन को फ़िल्टर करने और जैव विविधता को बहाल करने के लिए शहरी परिधीय राजमार्गों के आसपास स्वदेशी पौधों की घनी बेल्ट लगाते हैं।'
+    },
+    {
+      en: 'Deploying custom-designed, low-cost bio-filtration modules inside regional public school classrooms to actively capture particulate matter and safeguard student respiratory health.',
+      hi: 'पार्टिकुलेट मैटर को सक्रिय रूप से पकड़ने और छात्रों के श्वसन स्वास्थ्य की रक्षा के लिए सरकारी स्कूलों की कक्षाओं में कम लागत वाले बायो-फिल्ट्रेशन मॉड्यूल स्थापित किए गए।'
+    },
+    {
+      en: 'Interactive scholastic workshops introducing middle-school children to micro-sensor kits, mapping air quality indices, and teaching actionable habits to minimize pollutant exposure.',
+      hi: 'हाई स्कूल के बच्चों को माइक्रो-सेंसर किट से परिचित कराने, वायु गुणवत्ता सूचकांक को मापने और प्रदूषक जोखिम को कम करने के लिए शैक्षिक कार्यशालाएं।'
+    },
+    {
+      en: 'Connecting diagnostic camp patients with critical, high-grade medical inhalers, spacers, and preventive medical counsel at absolutely zero cost to the recipient.',
+      hi: 'निदान शिविर के मरीजों को बिल्कुल शून्य लागत पर महत्वपूर्ण चिकित्सा इनहेलर, स्पेसर और निवारक चिकित्सा परामर्श से सीधे जोड़ना।'
+    },
+    {
+      en: 'Grassroots community initiatives focused on deep physical debris removal and setting up eco-friendly trash segregation bins near schools to protect child play zones.',
+      hi: 'बच्चों के खेल क्षेत्रों की सुरक्षा के लिए स्कूलों के पास गहरे कचरे को हटाने और पर्यावरण-अनुकूल कचरा पृथक्करण डिब्बे स्थापित करने की जमीनी पहल।'
+    },
+    {
+      en: 'Gathering neighborhood elders and parents to share practical guidance on maintaining smoke-free kitchens, ventilating households, and early symptoms of respiratory fatigue.',
+      hi: 'पड़ोस के बुजुर्गों और अभिभावकों को धुआं रहित रसोई बनाए रखने, घरों में हवादार व्यवस्था और श्वसन संबंधी थकान के शुरुआती लक्षणों पर व्यावहारिक मार्गदर्शन।'
+    },
+    {
+      en: 'Installing real-time, low-power particulate sensors in high-density corridors to continuously track indoor air indicators and empower local school boards with clean air data.',
+      hi: 'इंडोर वायु संकेतकों को लगातार ट्रैक करने और स्थानीय स्कूल बोर्डों को डेटा के साथ सशक्त बनाने के लिए उच्च-घनत्व वाले गलियारों में वास्तविक समय सेंसर स्थापित करना।'
+    }
+  ];
+
   const heightClasses = [
     'h-64', 'h-72', 'h-80', 'h-96', 'h-64', 'h-80', 'h-72', 'h-96'
   ];
@@ -69,6 +106,7 @@ function generateGalleryItems(): GalleryItem[] {
     const titleDef = titles[(i - 1) % titles.length];
     const categoryDef = categories[(i - 1) % categories.length];
     const heightClass = heightClasses[(i - 1) % heightClasses.length];
+    const summaryDef = summaries[(i - 1) % summaries.length];
 
     items.push({
       id: i,
@@ -77,7 +115,9 @@ function generateGalleryItems(): GalleryItem[] {
       titleHi: `${titleDef.hi} #${i}`,
       category: categoryDef.en,
       categoryHi: categoryDef.hi,
-      heightClass
+      heightClass,
+      summary: summaryDef.en,
+      summaryHi: summaryDef.hi
     });
   }
 
@@ -242,13 +282,23 @@ export default function PastEventsGallery() {
                 className="w-full h-full object-contain"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 sm:p-8">
-                <span className="text-brand-accent font-display font-bold text-xs uppercase tracking-widest">
-                  {language === 'hi' ? selectedImage.categoryHi : selectedImage.category}
-                </span>
-                <h3 className="text-white font-display font-bold text-base sm:text-lg mt-1">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-6 sm:p-8 space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-brand-accent font-display font-bold text-xs uppercase tracking-widest bg-brand-accent/10 px-2.5 py-0.5 rounded-full border border-brand-accent/20">
+                    {language === 'hi' ? selectedImage.categoryHi : selectedImage.category}
+                  </span>
+                  <span className="text-brand-green-300 font-mono text-[10px] uppercase tracking-wider">
+                    {language === 'hi' ? `चित्र #${selectedImage.id}` : `Photo #${selectedImage.id}`}
+                  </span>
+                </div>
+                <h3 className="text-white font-display font-bold text-base sm:text-lg leading-snug">
                   {language === 'hi' ? selectedImage.titleHi : selectedImage.title}
                 </h3>
+                {selectedImage.summary && (
+                  <p className="text-gray-300 font-sans text-xs sm:text-sm leading-relaxed max-w-3xl mt-1.5 opacity-95">
+                    {language === 'hi' ? selectedImage.summaryHi : selectedImage.summary}
+                  </p>
+                )}
               </div>
             </motion.div>
           </motion.div>
