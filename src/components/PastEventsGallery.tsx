@@ -15,25 +15,8 @@ interface GalleryItem {
   summaryHi?: string;
 }
 
-// Write a function that programmatically generates the array of 52 gallery items
+// Write a function that programmatically generates the array of 169 gallery items from local images
 function generateGalleryItems(): GalleryItem[] {
-  const baseUnsplashIds = [
-    'photo-1542601906990-b4d3fb778b09', // bio shields / planting
-    'photo-1466692476868-aef1dfb1e735', // bio forestation
-    'photo-1551076805-e1869033e561', // screening / medical
-    'photo-1515187029135-18ee286d815b', // community education / youth
-    'photo-1584515979956-d9f6e5d09982', // respiratory help / clinic
-    'photo-1427504494785-3a9ca7044f45', // classroom air science
-    'photo-1576091160399-112ba8d25d1d', // pediatric screening
-    'photo-1464822759023-fed622ff2c3b', // clear mountain air
-    'photo-1509099836639-18ba1795216d', // children play clean air
-    'photo-1488521787991-ed7bbaae773c', // municipal school support
-    'photo-1532938911079-1b06ac7ceec7', // healthcare exam
-    'photo-1526256262350-7da7584cf5eb', // doctors consultation
-    'photo-1508962914676-134849a727f0', // community gather
-    'photo-1511632765486-a01980e01a18'  // youth group action
-  ];
-
   const categories = [
     { en: 'Health Screening', hi: 'स्वास्थ्य जांच' },
     { en: 'Micro-Foresting', hi: 'सूक्ष्म-वनीकरण' },
@@ -94,13 +77,8 @@ function generateGalleryItems(): GalleryItem[] {
 
   const items: GalleryItem[] = [];
 
-  for (let i = 1; i <= 52; i++) {
-    // Select unsplash ID from our list cyclically
-    const unsplashId = baseUnsplashIds[(i - 1) % baseUnsplashIds.length];
-    
-    // Programmatically construct unique image URLs by appending unique sig query params
-    // Vary width and height slightly to create a high-fidelity masonry layout
-    const url = `https://images.unsplash.com/${unsplashId}?auto=format&fit=crop&w=600&q=80&sig=${i}`;
+  for (let i = 1; i <= 169; i++) {
+    const url = `images/photo (${i}).jpeg`;
 
     // Select cyclic title and category definitions
     const titleDef = titles[(i - 1) % titles.length];
@@ -186,7 +164,7 @@ export default function PastEventsGallery() {
         </div>
 
         {/* Dynamic Masonry-Style Column Layout */}
-        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+        <div id="photo-gallery" className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
           <AnimatePresence>
             {galleryItems.slice(0, visibleCount).map((item) => {
               const itemTitle = language === 'hi' ? item.titleHi : item.title;
@@ -270,36 +248,71 @@ export default function PastEventsGallery() {
             </button>
 
             <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.95 }}
-              className="relative max-w-4xl max-h-[85vh] overflow-hidden rounded-3xl border border-white/10 shadow-2xl flex flex-col justify-end bg-brand-green-950"
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 180 }}
+              className="relative max-w-5xl w-full bg-brand-green-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-12 max-h-[85vh]"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
-                src={selectedImage.url.replace('&w=600', '&w=1200')}
-                alt={language === 'hi' ? selectedImage.titleHi : selectedImage.title}
-                className="w-full h-full object-contain"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-6 sm:p-8 space-y-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-brand-accent font-display font-bold text-xs uppercase tracking-widest bg-brand-accent/10 px-2.5 py-0.5 rounded-full border border-brand-accent/20">
-                    {language === 'hi' ? selectedImage.categoryHi : selectedImage.category}
-                  </span>
-                  <span className="text-brand-green-300 font-mono text-[10px] uppercase tracking-wider">
-                    {language === 'hi' ? `चित्र #${selectedImage.id}` : `Photo #${selectedImage.id}`}
-                  </span>
-                </div>
-                <h3 className="text-white font-display font-bold text-base sm:text-lg leading-snug">
-                  {language === 'hi' ? selectedImage.titleHi : selectedImage.title}
-                </h3>
-                {selectedImage.summary && (
-                  <p className="text-gray-300 font-sans text-xs sm:text-sm leading-relaxed max-w-3xl mt-1.5 opacity-95">
-                    {language === 'hi' ? selectedImage.summaryHi : selectedImage.summary}
-                  </p>
-                )}
+              {/* Left Column: Image Viewer */}
+              <div className="relative md:col-span-7 flex items-center justify-center bg-black overflow-hidden min-h-[250px] sm:min-h-[350px] md:min-h-[500px]">
+                <img
+                  src={selectedImage.url}
+                  alt={language === 'hi' ? selectedImage.titleHi : selectedImage.title}
+                  className="w-full h-full object-contain max-h-[40vh] md:max-h-[80vh]"
+                  referrerPolicy="no-referrer"
+                />
               </div>
+
+              {/* Right Column: Separate Animated Description Box */}
+              <motion.div
+                initial={{ opacity: 0, x: 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1, duration: 0.4 }}
+                className="md:col-span-5 p-6 sm:p-8 flex flex-col justify-between bg-brand-green-950 border-t md:border-t-0 md:border-l border-white/10 overflow-y-auto"
+              >
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-brand-accent font-display font-extrabold text-[10px] sm:text-xs uppercase tracking-widest bg-brand-accent/10 px-3 py-1 rounded-full border border-brand-accent/20">
+                      {language === 'hi' ? selectedImage.categoryHi : selectedImage.category}
+                    </span>
+                    <span className="text-gray-400 font-mono text-[11px]">
+                      {language === 'hi' ? `चित्र #${selectedImage.id}` : `Photo #${selectedImage.id}`}
+                    </span>
+                  </div>
+
+                  <h3 className="text-white font-display font-extrabold text-xl sm:text-2xl tracking-tight leading-tight">
+                    {language === 'hi' ? selectedImage.titleHi : selectedImage.title}
+                  </h3>
+
+                  <div className="h-1 w-12 bg-brand-accent rounded-full" />
+
+                  {selectedImage.summary && (
+                    <div className="space-y-2 pt-2">
+                      <p className="text-brand-green-300 font-display font-bold text-xs uppercase tracking-wider">
+                        {language === 'hi' ? 'अभियान का विवरण' : 'Campaign Overview'}
+                      </p>
+                      <p className="text-gray-300 font-sans text-xs sm:text-sm leading-relaxed">
+                        {language === 'hi' ? selectedImage.summaryHi : selectedImage.summary}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-6 border-t border-white/5 mt-6 sm:mt-8 flex justify-between items-center text-xs text-gray-400">
+                  <span className="flex items-center space-x-1.5 font-sans">
+                    <span className="h-2 w-2 rounded-full bg-brand-accent animate-pulse" />
+                    <span>Pratham Shvaas</span>
+                  </span>
+                  <button
+                    onClick={() => setSelectedImage(null)}
+                    className="text-brand-accent hover:text-white transition-colors font-display font-bold cursor-pointer"
+                  >
+                    {language === 'hi' ? 'बंद करें' : 'Close'}
+                  </button>
+                </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         )}
