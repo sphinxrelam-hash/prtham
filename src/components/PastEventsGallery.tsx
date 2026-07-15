@@ -287,17 +287,6 @@ export default function PastEventsGallery() {
                   </h3>
 
                   <div className="h-1 w-12 bg-brand-accent rounded-full" />
-
-                  {selectedImage.summary && (
-                    <div className="space-y-2 pt-2">
-                      <p className="text-brand-green-300 font-display font-bold text-xs uppercase tracking-wider">
-                        {language === 'hi' ? 'अभियान का विवरण' : 'Campaign Overview'}
-                      </p>
-                      <p className="text-gray-300 font-sans text-xs sm:text-sm leading-relaxed">
-                        {language === 'hi' ? selectedImage.summaryHi : selectedImage.summary}
-                      </p>
-                    </div>
-                  )}
                 </div>
 
                 <div className="pt-6 border-t border-white/5 mt-6 sm:mt-8 flex justify-between items-center text-xs text-gray-400">
