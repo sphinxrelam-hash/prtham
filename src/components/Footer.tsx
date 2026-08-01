@@ -30,6 +30,20 @@ export default function Footer() {
     }, 5000);
   };
 
+  // We define the array elements outside the JSX. 
+  // You can easily uncomment any row here in the future without breaking the array mapping!
+ // UPDATED: Using the exact Instagram URL provided
+  const socialLinks = [
+    // { icon: <Facebook className="h-4 w-4" />, href: 'https://facebook.com/prathamshvaas', label: 'Facebook' },
+    { 
+      icon: <Instagram className="h-4 w-4" />, 
+      href: 'https://www.instagram.com/pratham.shvaas.foundation/', 
+      label: 'Instagram' 
+    },
+    // { icon: <Twitter className="h-4 w-4" />, href: 'https://twitter.com/prathamshvaas', label: 'Twitter' },
+    // { icon: <Linkedin className="h-4 w-4" />, href: 'https://linkedin.com/company/prathamshvaas', label: 'LinkedIn' },
+  ];
+
   return (
     <footer className="bg-brand-green-950 text-gray-300 font-sans border-t border-brand-green-900">
       
@@ -49,9 +63,7 @@ export default function Footer() {
             {t('footer.brandSub')}
           </p>
           <div className="pt-2">
-            <span className="inline-block bg-brand-green-900 text-brand-accent text-xs font-bold px-3 py-1.5 rounded-lg border border-brand-green-800/50">
-              {t('footer.regTag')}
-            </span>
+           
           </div>
         </div>
 
@@ -93,57 +105,14 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Newsletter Signup / Community Action */}
-        <div className="space-y-4">
-          <h4 className="font-display font-bold text-white text-sm uppercase tracking-wider">
-            {t('footer.updateHeader')}
-          </h4>
-          <p className="text-xs sm:text-sm text-gray-300/80 leading-relaxed">
-            {t('footer.updateSub')}
-          </p>
-          <div className="pt-2">
-            <form onSubmit={handleSubscribe} className="space-y-2">
-              <div className="flex">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t('footer.placeholder')}
-                  className="bg-brand-green-900 border border-brand-green-800 rounded-l-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-accent w-full"
-                  aria-label="Newsletter email input"
-                />
-                <button
-                  type="submit"
-                  className="bg-brand-accent hover:bg-brand-accent-hover text-brand-green-950 font-display font-bold text-xs px-4 rounded-r-xl transition-colors cursor-pointer"
-                >
-                  {t('footer.join')}
-                </button>
-              </div>
-              {subscribed && (
-                <p className="text-[11px] text-brand-accent font-medium animate-pulse mt-1.5">
-                  {language === 'hi'
-                    ? 'प्रथम श्वास समाचार पत्र की सदस्यता लेने के लिए धन्यवाद!'
-                    : 'Thank you for subscribing to the Pratham Shvaas newsletter!'}
-                </p>
-              )}
-            </form>
-          </div>
-        </div>
-
       </div>
 
       {/* Middle Bar: Social & Action Icons */}
       <div className="border-t border-brand-green-900/60 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-6">
         
-        {/* Social Icons */}
+        {/* Social Icons Mapping */}
         <div className="flex items-center space-x-4">
-          {[
-            { icon: <Facebook className="h-4 w-4" />, href: 'https://facebook.com', label: 'Facebook' },
-            { icon: <Instagram className="h-4 w-4" />, href: 'https://instagram.com', label: 'Instagram' },
-            { icon: <Twitter className="h-4 w-4" />, href: 'https://twitter.com', label: 'Twitter' },
-            { icon: <Linkedin className="h-4 w-4" />, href: 'https://linkedin.com', label: 'LinkedIn' },
-          ].map((social, i) => (
+          {socialLinks.map((social, i) => (
             <a
               key={i}
               href={social.href}
@@ -171,7 +140,7 @@ export default function Footer() {
       {/* Bottom Copyright Notice Bar */}
       <div className="bg-brand-green-950/70 border-t border-brand-green-900/40 text-center py-6 text-xs text-gray-400/80 font-sans tracking-wide">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>{t('footer.copyright')}</p>
+          <p></p>
           <p className="font-medium text-brand-accent">
             {t('footer.motto')}
           </p>

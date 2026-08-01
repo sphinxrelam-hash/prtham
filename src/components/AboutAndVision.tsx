@@ -84,7 +84,7 @@ export default function AboutAndVision() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                 {[
                   { en: '100% Transparent Governance', hi: '100% पारदर्शी प्रशासन' },
-                  { en: 'Uttarakhand Reg. S/8432/NGO', hi: 'उत्तराखंड पंजीकृत संस्था S/8432' },
+              
                   { en: 'Compassionate Local Volunteers', hi: 'स्थानीय समर्पित स्वयंसेवक' },
                   { en: 'Direct Grassroots Impact', hi: 'सीधा जमीनी स्तर पर प्रभाव' }
                 ].map((item, idx) => (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Heart, X, Check, Landmark, Shield, Gift } from 'lucide-react';
+import { Heart, X, Check, Shield, Gift } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function FloatingDonateButton() {
@@ -18,65 +18,40 @@ export default function FloatingDonateButton() {
 
   // Monitor scroll height to show floating button only after scrolling past 300px
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
+    const handleScroll = () => setIsVisible(window.scrollY > 300);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Set Body overflow hidden when Modal is active
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
   const donationTiers = [
-    {
-      amount: 500,
-      label: '₹500',
-      fundsEn: 'Funds 1 pediatric respiratory screening kit & clinical assessment.',
-      fundsHi: '1 बच्चे की फेफड़ों की जांच और नैदानिक मूल्यांकन का खर्च।',
-    },
-    {
-      amount: 1000,
-      label: '₹1,000',
-      fundsEn: 'Distributes 2 rescue inhalers to a municipal school health cabinet.',
-      fundsHi: 'सरकारी स्कूल के स्वास्थ्य कैबिनेट में 2 जीवन रक्षक इनहेलर का वितरण।',
-    },
-    {
-      amount: 2500,
-      label: '₹2,500',
-      fundsEn: 'Plants 10 oxygen-rich bio-shield saplings near school lines.',
-      fundsHi: 'स्कूल परिसर के चारों ओर 10 ऑक्सीजन से भरपूर जैव-शील्ड पौधों का रोपण।',
-    },
-    {
-      amount: 5000,
-      label: '₹5,000',
-      fundsEn: 'Sponsors 1 high-efficiency PM2.5 classroom air eco-purifier.',
-      fundsHi: '1 कक्षा के लिए उच्च दक्षता वाले PM2.5 इको-प्यूरीफायर का प्रायोजन।',
-    },
+    { amount: 500, label: '₹500' },
+    { amount: 1000, label: '₹1,000' },
+    { amount: 2500, label: '₹2,500' },
+    { amount: 5000, label: '₹5,000' },
   ];
 
   const handleDonateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const donationValue = selectedAmount === 'custom' ? Number(customAmount) : selectedAmount;
+    
     if (!donationValue || donationValue <= 0 || !fullName || !email) {
       return;
     }
 
     setIsSubmitting(true);
+
+    // 🚀 PAYMENT GATEWAY INTEGRATION GOES HERE
+    // In the future, instead of a setTimeout, you will trigger the Razorpay window here:
+    // const options = { key: "YOUR_RAZORPAY_KEY", amount: donationValue * 100, ... }
+    // const rzp1 = new window.Razorpay(options);
+    // rzp1.open();
+    
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -91,18 +66,6 @@ export default function FloatingDonateButton() {
         setSelectedAmount(1000);
       }, 4000);
     }, 1800);
-  };
-
-  const getFundingDescription = () => {
-    if (selectedAmount === 'custom') {
-      const amt = Number(customAmount);
-      if (!amt || amt <= 0) return language === 'hi' ? 'आपकी सहायता सीधे बच्चों के स्वास्थ्य में योगदान देगी।' : 'Your support directly funds custom pediatric breathing aids.';
-      if (amt < 1000) return language === 'hi' ? 'दवा और एलर्जी स्क्रीनिंग किट का वित्तपोषण।' : 'Sponsors medical allergen diagnostic toolkits.';
-      if (amt < 2500) return language === 'hi' ? 'विद्यालयों में इनहेलर और नेबुलाइज़र सहायता का वित्तपोषण।' : 'Sponsors school-level inhalers and emergency breathing aids.';
-      return language === 'hi' ? 'कक्षाओं में वायु वेंटिलेशन सुधार और वनीकरण।' : 'Sponsors indoor air purification and bio-shield micro-forests.';
-    }
-    const activeTier = donationTiers.find(t => t.amount === selectedAmount);
-    return language === 'hi' ? activeTier?.fundsHi : activeTier?.fundsEn;
   };
 
   return (
@@ -120,12 +83,7 @@ export default function FloatingDonateButton() {
             className="fixed bottom-6 right-6 z-40 bg-brand-accent hover:bg-white text-brand-green-950 h-14 w-14 rounded-full shadow-2xl flex items-center justify-center border-2 border-brand-green-950 cursor-pointer group"
             aria-label="Open donation options"
             title={t('nav.donate')}
-            id="btn-floating-donate"
           >
-            <span className="absolute top-1 right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-600"></span>
-            </span>
             <Heart className="h-6 w-6 fill-rose-600 stroke-rose-600 group-hover:scale-110 transition-transform duration-300" />
           </motion.button>
         )}
@@ -134,14 +92,14 @@ export default function FloatingDonateButton() {
       {/* Interactive Donation Modal Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-50 overflow-y-auto bg-brand-green-950/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-10" id="donate-modal-overlay">
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-brand-green-950/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-10">
             {/* Modal Box */}
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 20 }}
               className="relative w-full max-w-lg bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-100 flex flex-col max-h-[90vh]"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               {/* Top Cover Banner */}
               <div className="bg-brand-green-950 text-white p-6 sm:p-8 relative">
@@ -224,7 +182,7 @@ export default function FloatingDonateButton() {
                         </div>
                       </div>
 
-                      {/* Custom Input (Shows conditionally) */}
+                      {/* Custom Input */}
                       {selectedAmount === 'custom' && (
                         <motion.div
                           initial={{ opacity: 0, y: -10 }}
@@ -243,14 +201,6 @@ export default function FloatingDonateButton() {
                           <span className="absolute right-4 top-3 text-sm text-gray-400 font-semibold">INR</span>
                         </motion.div>
                       )}
-
-                      {/* Tier funding details */}
-                      <div className="p-4 rounded-2xl bg-brand-green-50/50 border border-brand-green-100 flex items-start space-x-3 text-brand-green-900 text-xs sm:text-sm">
-                        <Landmark className="h-5 w-5 text-brand-green-700 shrink-0 mt-0.5" />
-                        <p className="font-sans font-medium leading-relaxed">
-                          {getFundingDescription()}
-                        </p>
-                      </div>
 
                       {/* Full Name & Email Input fields */}
                       <div className="space-y-4">

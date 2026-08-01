@@ -5,7 +5,6 @@ import OurCauses from './components/OurCauses';
 import Team from './components/Team';
 import YearlyEvents from './components/YearlyEvents';
 import PastEventsGallery from './components/PastEventsGallery';
-import UpcomingEvents from './components/UpcomingEvents';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import FloatingDonateButton from './components/FloatingDonateButton';
@@ -30,15 +29,12 @@ export default function App() {
         {/* Section 7: Our Members / Core Board Team & General Members */}
         <Team />
 
-        {/* Section: Chronological Year-to-Year Events with Pictures */}
-        <YearlyEvents />
+        {/* Section: Chronological Year-to-Year Events with Pictures - COMMENTED OUT */}
+        {/* <YearlyEvents /> */}
 
         {/* Section 5: High-Performance 50+ Photo Gallery */}
-        <PastEventsGallery />
-
-        {/* Section 6: Upcoming Events Timeline & Inline Registration */}
-        <UpcomingEvents />
-
+        <PastEventsGallery /> 
+        
         {/* Section 8: Contact / Inquiries Form Section */}
         <Contact />
       </main>

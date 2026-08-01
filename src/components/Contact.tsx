@@ -14,7 +14,6 @@ export default function Contact() {
     message: '',
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleInputChange = (
@@ -26,36 +25,36 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!formData.fullName || !formData.email || !formData.message) {
-      return; // Basic safeguard
+      return; 
     }
 
-    setIsSubmitting(true);
+    const emailSubject = encodeURIComponent(formData.subject || "New Inquiry from Pratham Shvaas Website");
+    const emailBody = encodeURIComponent(
+      `Name: ${formData.fullName}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    );
 
-    // Mock network request for pristine UX
+    // This opens the user's email client directly
+    window.location.href = `mailto:psfdehradun@gmail.com?subject=${emailSubject}&body=${emailBody}`;
+    
+    // Show a brief success message on the form and reset fields
+    setIsSubmitted(true);
     setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      // Reset form fields after submission
+      setIsSubmitted(false);
       setFormData({
         fullName: '',
         email: '',
         subject: '',
         message: '',
       });
-
-      // Clear success indicator after 6 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 6000);
-    }, 1200);
+    }, 4000);
   };
 
   return (
     <section id="contact" className="py-24 bg-white text-gray-800 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -84,10 +83,8 @@ export default function Contact() {
           </motion.p>
         </div>
 
-        {/* Form & Info Section Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* Left Column: Modern Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -97,7 +94,6 @@ export default function Contact() {
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               
-              {/* Floating Input: Full Name */}
               <div className="relative">
                 <input
                   type="text"
@@ -117,7 +113,6 @@ export default function Contact() {
                 </label>
               </div>
 
-              {/* Floating Input: Email Address */}
               <div className="relative">
                 <input
                   type="email"
@@ -137,7 +132,6 @@ export default function Contact() {
                 </label>
               </div>
 
-              {/* Floating Input: Subject */}
               <div className="relative">
                 <input
                   type="text"
@@ -152,11 +146,10 @@ export default function Contact() {
                   htmlFor="contact-subject"
                   className="absolute left-4 top-4 text-gray-400 text-xs sm:text-sm font-medium transition-all pointer-events-none origin-left transform -translate-y-0.5 scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-3.5 peer-focus:scale-75 peer-focus:text-brand-green-700 peer-[:not(:placeholder-shown)]:-translate-y-3.5 peer-[:not(:placeholder-shown)]:scale-75 peer-[:not(:placeholder-shown)]:text-brand-green-700"
                 >
-                  {t('contact.subjectField')}
+                  {t('subjectField')}
                 </label>
               </div>
 
-              {/* Floating Textarea: Message */}
               <div className="relative">
                 <textarea
                   name="message"
@@ -176,11 +169,10 @@ export default function Contact() {
                 </label>
               </div>
 
-              {/* Submit Button with Dynamic Transition States */}
               <div className="pt-2">
                 <button
                   type="submit"
-                  disabled={isSubmitting || isSubmitted}
+                  disabled={isSubmitted}
                   className={`w-full relative flex items-center justify-center space-x-2 font-display font-bold py-4 px-6 rounded-xl shadow-md transition-all cursor-pointer ${
                     isSubmitted
                       ? 'bg-emerald-600 text-white shadow-emerald-200'
@@ -188,22 +180,7 @@ export default function Contact() {
                   }`}
                 >
                   <AnimatePresence mode="wait">
-                    {isSubmitting ? (
-                      <motion.div
-                        key="submitting"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="flex items-center space-x-2"
-                      >
-                        {/* Spinner */}
-                        <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                        </svg>
-                        <span>{t('contact.btnSending')}</span>
-                      </motion.div>
-                    ) : isSubmitted ? (
+                    {isSubmitted ? (
                       <motion.div
                         key="submitted"
                         initial={{ opacity: 0, scale: 0.8 }}
@@ -212,7 +189,7 @@ export default function Contact() {
                         className="flex items-center space-x-2"
                       >
                         <CheckCircle className="h-5 w-5 text-white animate-bounce" />
-                        <span>{t('contact.btnSent')}</span>
+                        <span>Opening Email App...</span>
                       </motion.div>
                     ) : (
                       <motion.div
@@ -229,31 +206,9 @@ export default function Contact() {
                   </AnimatePresence>
                 </button>
               </div>
-
-              {/* Inline dynamic success message box */}
-              <AnimatePresence>
-                {isSubmitted && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-medium rounded-xl flex items-start space-x-3"
-                  >
-                    <CheckCircle className="h-5 w-5 shrink-0 text-emerald-600 mt-0.5" />
-                    <div>
-                      <p className="font-bold">{t('contact.successTitle')}</p>
-                      <p className="mt-0.5 text-emerald-700/90 leading-relaxed font-sans">
-                        {t('contact.successText')}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
             </form>
           </motion.div>
 
-          {/* Right Column: NGO Contact Info Details */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -261,7 +216,6 @@ export default function Contact() {
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="lg:col-span-5 space-y-8 bg-brand-green-950 text-white p-8 sm:p-10 rounded-3xl shadow-lg relative overflow-hidden"
           >
-            {/* Background pattern */}
             <div className="absolute inset-0 bg-brand-green-900/40 -z-10" />
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-brand-accent/10 rounded-full blur-2xl" />
 
@@ -284,7 +238,7 @@ export default function Contact() {
                     {t('contact.locationLabel')}
                   </h4>
                   <p className="text-sm text-gray-300 font-sans mt-1 leading-relaxed">
-                    {t('contact.location')}
+                    9/17, Mohit Vihar, Shakti Enclave, Kaonli, Sanjai Colony, Dehradun- 248001
                   </p>
                 </div>
               </div>
@@ -318,7 +272,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Quick Note */}
             <div className="pt-6 border-t border-white/10 flex items-center space-x-3 text-brand-green-100 text-xs font-semibold">
               <Clock className="h-4 w-4 text-brand-accent" />
               <span>{t('contact.response')}</span>
@@ -326,7 +279,6 @@ export default function Contact() {
           </motion.div>
 
         </div>
-
       </div>
     </section>
   );
